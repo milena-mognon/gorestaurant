@@ -64,15 +64,6 @@ const Dashboard: React.FC = () => {
         image: food.image,
         price: food.price,
       });
-      console.log(
-        foods.filter(item => {
-          if (item.id === editingFood.id) {
-            console.log(response.data);
-            return response.data;
-          }
-          return item;
-        }),
-      );
 
       setFoods(
         foods.map(item => {
@@ -89,7 +80,12 @@ const Dashboard: React.FC = () => {
   }
 
   async function handleDeleteFood(id: number): Promise<void> {
-    // TODO DELETE A FOOD PLATE FROM THE API
+    try {
+      await api.delete<IFoodPlate>(`/foods/${id}`);
+      setFoods(foods.filter(item => item.id !== id));
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function toggleModal(): void {
